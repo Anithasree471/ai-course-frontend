@@ -1,0 +1,103 @@
+import { useState } from "react"
+import { useNavigate, Link } from "react-router-dom"
+
+function Login() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+
+ const handleLogin = async (e) => {
+  e.preventDefault()
+
+  try {
+    const res = await fetch("http://127.0.0.1:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      alert(data.error || "Login failed")
+      return
+    }
+
+    // ✅ STORE ROLE ALSO
+    localStorage.setItem("isLoggedIn", "true")
+    localStorage.setItem("currentUser", data.user.email)
+    localStorage.setItem("user_id", data.user.id)
+    localStorage.setItem("role", data.user.role)
+
+    console.log("Login successful")
+    console.log("currentUser:", data.user.email)
+    console.log("role:", data.user.role)
+
+    alert("Login Successful!")
+
+    // ✅ ADMIN REDIRECT
+    if (data.user.role === "admin") {
+      navigate("/admin-dashboard")
+    } else {
+      navigate("/")
+    }
+
+  } catch (error) {
+    console.error("LOGIN ERROR:", error)
+    alert("Server error")
+  }
+}
+
+  return (
+    <div className="container mt-5">
+      <div
+        className="card card-custom p-4 mx-auto bg-dark text-light shadow"
+        style={{ width: "400px", borderRadius: "16px" }}
+      >
+        <h3 className="text-center mb-3">Login</h3>
+
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            className="form-control mb-3"
+            placeholder="Email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            type="password"
+            className="form-control mb-3"
+            placeholder="Password"
+            value={password}
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button className="btn btn-danger w-100">Login</button>
+        </form>
+
+        <p className="text-center mt-3 mb-1">
+          Don’t have an account?{" "}
+          <Link to="/register" className="text-danger text-decoration-none">
+            Sign Up
+          </Link>
+        </p>
+
+        <p className="text-center mb-0">
+          <Link to="/forgot-password" className="text-light text-decoration-none">
+            Forgot Password?
+          </Link>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export default Login
