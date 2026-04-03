@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import API_BASE_URL from "../config";
 
 function Register() {
   const [name, setName] = useState("")
@@ -11,7 +12,7 @@ function Register() {
     e.preventDefault()
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/register", {
+      const res = await fetch("${API_BASE_URL}/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

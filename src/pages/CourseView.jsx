@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-
+import API_BASE_URL from "../config";
 function CourseView() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ function CourseView() {
     try {
       setLoading(true)
 
-      const res = await fetch(`http://127.0.0.1:5000/course/${id}`)
+      const res = await fetch(`${API_BASE_URL}/course/${id}`)
       const data = await res.json()
 
       if (!res.ok) {
@@ -47,7 +47,7 @@ function CourseView() {
     if (!course) return
 
     try {
-      const res = await fetch(`http://127.0.0.1:5000/course/${id}/progress`, {
+      const res = await fetch(`${API_BASE_URL}/course/${id}/progress`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

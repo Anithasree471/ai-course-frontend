@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import API_BASE_URL from "../config";
 
 function AdminDashboard() {
   const [dashboardData, setDashboardData] = useState([])
@@ -23,7 +24,7 @@ function AdminDashboard() {
       setLoading(true)
 
       const res = await fetch(
-        `http://127.0.0.1:5000/admin/dashboard?email=${currentUser}`
+        `${API_BASE_URL}/admin/dashboard?email=${currentUser}`
       )
 
       const data = await res.json()

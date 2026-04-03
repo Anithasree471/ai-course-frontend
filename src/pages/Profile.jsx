@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import API_BASE_URL from "../config";
 
 function Profile() {
   const [courses, setCourses] = useState([])
@@ -21,7 +22,7 @@ function Profile() {
     try {
       setLoading(true)
 
-      const res = await fetch(`http://127.0.0.1:5000/courses/${userId}`)
+      const res = await fetch(`${API_BASE_URL}/courses/${userId}`)
       const data = await res.json()
 
       if (!res.ok) {
@@ -40,7 +41,7 @@ function Profile() {
 
   const handleDelete = async (id) => {
   try {
-    const res = await fetch(`http://127.0.0.1:5000/course/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/course/${id}`, {
       method: "DELETE"
     })
 
