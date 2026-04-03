@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import API_BASE_URL from "../config";
+import API_BASE_URL from "../config"
 
 function AdminDashboard() {
   const [dashboardData, setDashboardData] = useState([])
@@ -24,17 +24,17 @@ function AdminDashboard() {
       setLoading(true)
 
       const res = await fetch(
-        `${API_BASE_URL}/admin/dashboard?email=${currentUser}`
+        `${API_BASE_URL}/admin/dashboard?email=${encodeURIComponent(currentUser)}`
       )
 
-      const data = await res.json()
+      const data = await res.json().catch(() => null)
 
       if (!res.ok) {
-        alert(data.error || "Failed to load admin dashboard")
+        alert(data?.error || "Failed to load admin dashboard")
         return
       }
 
-      setDashboardData(data.dashboard || [])
+      setDashboardData(data?.dashboard || [])
     } catch (error) {
       console.error("ADMIN DASHBOARD ERROR:", error)
       alert("Error loading admin dashboard")

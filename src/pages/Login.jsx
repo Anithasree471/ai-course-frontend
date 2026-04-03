@@ -1,58 +1,51 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import API_BASE_URL from "../config";
+import API_BASE_URL from "../config"
 
 function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
 
- const handleLogin = async (e) => {
-  e.preventDefault()
+  const handleLogin = async (e) => {
+    e.preventDefault()
 
-  try {
-    const res = await fetch(`${API_BASE_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        password
+    try {
+      const res = await fetch(`${API_BASE_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
       })
-    })
 
-    const data = await res.json()
+      const data = await res.json().catch(() => null)
 
-    if (!res.ok) {
-      alert(data.error || "Login failed")
-      return
+      if (!res.ok) {
+        alert(data?.error || "Login failed")
+        return
+      }
+
+      localStorage.setItem("isLoggedIn", "true")
+      localStorage.setItem("currentUser", data.user.email)
+      localStorage.setItem("user_id", data.user.id)
+      localStorage.setItem("role", data.user.role)
+
+      alert("Login Successful!")
+
+      if (data.user.role === "admin") {
+        navigate("/admin-dashboard")
+      } else {
+        navigate("/")
+      }
+    } catch (error) {
+      console.error("LOGIN ERROR:", error)
+      alert("Server error")
     }
-
-    // ✅ STORE ROLE ALSO
-    localStorage.setItem("isLoggedIn", "true")
-    localStorage.setItem("currentUser", data.user.email)
-    localStorage.setItem("user_id", data.user.id)
-    localStorage.setItem("role", data.user.role)
-
-    console.log("Login successful")
-    console.log("currentUser:", data.user.email)
-    console.log("role:", data.user.role)
-
-    alert("Login Successful!")
-
-    // ✅ ADMIN REDIRECT
-    if (data.user.role === "admin") {
-      navigate("/admin-dashboard")
-    } else {
-      navigate("/")
-    }
-
-  } catch (error) {
-    console.error("LOGIN ERROR:", error)
-    alert("Server error")
   }
-}
 
   return (
     <div className="container mt-5">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import API_BASE_URL from "../config";
+import API_BASE_URL from "../config"
 
 function Dashboard() {
   const [courses, setCourses] = useState([])
@@ -23,14 +23,14 @@ function Dashboard() {
       setLoading(true)
 
       const res = await fetch(`${API_BASE_URL}/courses/${userId}`)
-      const data = await res.json()
+      const data = await res.json().catch(() => null)
 
       if (!res.ok) {
-        alert(data.error || "Failed to fetch courses")
+        alert(data?.error || "Failed to fetch courses")
         return
       }
 
-      setCourses(data.courses || [])
+      setCourses(data?.courses || [])
     } catch (error) {
       console.error("FETCH COURSES ERROR:", error)
       alert("Error loading courses")
@@ -45,10 +45,10 @@ function Dashboard() {
         method: "DELETE"
       })
 
-      const data = await res.json()
+      const data = await res.json().catch(() => null)
 
       if (!res.ok) {
-        alert(data.error || "Delete failed")
+        alert(data?.error || "Delete failed")
         return
       }
 

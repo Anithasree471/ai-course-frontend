@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import API_BASE_URL from "../config";
+import API_BASE_URL from "../config"
 
 function Home() {
   const [topic, setTopic] = useState("")
@@ -68,7 +68,7 @@ function Home() {
     try {
       setLoading(true)
 
-      const res = await fetch("${API_BASE_URL}/generate", {
+      const res = await fetch(`${API_BASE_URL}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -79,14 +79,14 @@ function Home() {
         })
       })
 
-      const data = await res.json()
+      const data = await res.json().catch(() => null)
 
       if (!res.ok) {
-        alert(data.error || "Backend error generating course")
+        alert(data?.error || "Backend error generating course")
         return
       }
 
-      if (!data.course || !data.course.id) {
+      if (!data?.course || !data.course.id) {
         console.log("Generate response:", data)
         alert("Course ID not received from backend")
         return

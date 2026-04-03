@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import API_BASE_URL from "../config";
+import API_BASE_URL from "../config"
 
 function Register() {
   const [name, setName] = useState("")
@@ -24,10 +24,10 @@ function Register() {
         })
       })
 
-      const data = await res.json()
+      const data = await res.json().catch(() => null)
 
       if (!res.ok) {
-        alert(data.error || "Registration failed")
+        alert(data?.error || "Registration failed")
         return
       }
 
@@ -80,14 +80,14 @@ function Register() {
         <p className="text-center mt-3 mb-1">
           Already have an account?{" "}
           <Link to="/login" className="text-danger text-decoration-none">
-          Login
+            Login
           </Link>
         </p>
 
         <p className="text-center mb-0">
           <span className="text-light">Admin? </span>
           <Link to="/login" className="text-danger text-decoration-none fw-bold">
-          Login here
+            Login here
           </Link>
         </p>
       </div>
